@@ -48,7 +48,7 @@ return new class extends Migration
             $table->string('gi_box_type_name');
             $table->float('product_discount_for_report');
             $table->float('supplier_promo');
-            $table->unsignedBigInteger('rid');
+            $table->BigInteger('rid');
             $table->float('ppvz_spp_prc');
             $table->float('ppvz_kvw_prc_base');
             $table->float('ppvz_kvw_prc');

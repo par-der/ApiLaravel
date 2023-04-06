@@ -60,11 +60,11 @@ class OzonApi
 
     /**
      * @param array $filter
-     * @param $last_id
+     * @param string $last_id
      * @param int $limit
      * @return array
      */
-    public function productInfoStocksV3(array $filter, $last_id = '', int $limit = 100): array {
+    public function productInfoStocksV3(array $filter, string $last_id = '', int $limit = 100): array {
         return $this->post('/v3/product/info/stocks', [
             'filter' => $filter,
             'last_id' => $last_id,
@@ -81,7 +81,7 @@ class OzonApi
      * @param array $with
      * @return array
      */
-    public function postingFboListV2(array $filter, string $dir = 'asc', int $limit = 100, int $offset = 0, bool $translit = false, array $with = []): array {
+    public function postingFboListV2(array $filter, int $offset = 0, string $dir = 'asc', int $limit = 1000, bool $translit = false, array $with = []): array {
         return $this->post('/v2/posting/fbo/list', [
             'dir' => $dir,
             'filter' => $filter,

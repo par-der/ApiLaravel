@@ -33,7 +33,7 @@ class OzonUpload implements ShouldQueue
     public function handle(OzonApi $api): void
     {
         $this->api = $api;
-        $this->productInfoStocksV3($api);
+        //$this->productInfoStocksV3($api);
         $this->postingFboListV2($api);
     }
 
@@ -88,16 +88,17 @@ class OzonUpload implements ShouldQueue
     {
 
         $offset = 0;
-        $result = $api->postingFboListV2(["since" => "2020-09-01T00:00:00.000Z",
+        $result = $api->postingFboListV2(["since" => "2023-01-01T00:00:00.00Z",
             "status" => "",
-            "to" => "2023-11-17T10:44:12.828Z"], 'asc', 100, $offset);
+            "to" => (new DateTime())->format('Y-m-d\TH:i:s\Z')], $offset);
         //dd($res);
         $items = $result['result'];
+        $response = $api->getResponse();
         do {
             $dataForSave = [];
 
             foreach ($items as $item) {
-                //dd($item);
+                //dd($items);
 
                 for ($i = 0; $i < count($item['products']); $i++) {
 
@@ -157,15 +158,15 @@ class OzonUpload implements ShouldQueue
                     ];
                 }
             }
-            $dataForSaveChunks = array_chunk($dataForSave, 100);
+            $dataForSaveChunks = array_chunk($dataForSave, 10);
             foreach ($dataForSaveChunks as $chunk) {
                 //dd($chunk);
                 OzonPostingFbo::upsert($chunk, ['order_id', 'posting_number', 'sku']);
             }
             $offset += 100;
-            $result = $api->postingFboListV2(["since" => "2020-09-01T00:00:00.000Z",
+            $result = $api->postingFboListV2(["since" => "2023-01-01T00:00:00.00Z",
                 "status" => "",
-                "to" => "2023-11-17T10:44:12.828Z"], 'asc', 100, $offset);
+                "to" => (new DateTime())->format('Y-m-d\TH:i:s\Z')], $offset);
             $response = $api->getResponse();
             $items = $result['result'];
         } while (!empty($items['result']));

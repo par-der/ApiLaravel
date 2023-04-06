@@ -51,13 +51,13 @@ class wbUpload implements ShouldQueue
     public function handle()
     {
 
-        $date = new DateTime('-750 day');
-        $this->setExciseGoods($date);
-        $this->setIncomes($date);
-        $this->setOrders($date);
-        $this->setPrices();
-        $this->setSales($date);
-        $this->setStocks($date);
+        $date = new DateTime('2023-01-01');
+//        $this->setExciseGoods($date);
+//        $this->setIncomes($date);
+//        $this->setOrders($date);
+//        $this->setPrices();
+//        $this->setSales($date);
+//        $this->setStocks($date);
         $this->setReportDetailByPeriods($date);
 
     }
@@ -69,12 +69,12 @@ class wbUpload implements ShouldQueue
 
         $date = (new DateTime())->format('Y-m-d');
         $stocks = $this->getStocks($dateFrom);
-        $dataForSave = [];
+        //$dataForSave = [];
         Stock::where('date', $date)->delete();
         foreach ($stocks as $item) {
             //dd($stocks);
 
-            $dataForSave[] = [
+            Stock::create([
                 'date' => $date,
                 'last_change_date' => $item['lastChangeDate'],
                 'supplier_article' => $item['supplierArticle'],
@@ -93,11 +93,7 @@ class wbUpload implements ShouldQueue
                 'price' => $item['Price'],
                 'discount' => $item['Discount'],
                 'nm_id' => $item['nmId'],
-            ];
-        }
-        $dataForSaveChunks = array_chunk($dataForSave, 1000);
-        foreach ($dataForSaveChunks as $chunk) {
-            Stock::where('barcode')->insert($chunk);
+            ]);
         }
 
     }
@@ -237,13 +233,13 @@ class wbUpload implements ShouldQueue
 
             $dataForSave = [];
             foreach ($reportDateilByPeriod as $item) {
-                //dd($reportDateilByPeriod);
+                //dd($item);
 
                 $dataForSave[] = [
                     'realizationreport_id' => $item['realizationreport_id'] ?? null,
                     'date_from' => (new DateTime($item['date_from']))->format('Y-m-d') ?? null,
                     'date_to' => (new DateTime($item['date_to']))->format('Y-m-d') ?? null,
-                    'date' => date("d.m.Y") ?? null,
+                    'date' => date("Y-m-d") ?? null,
                     'create_dt' => (new DateTime($item['create_dt']))->format('Y-m-d') ?? null,
                     'suppliercontract_code' => $item['suppliercontract_code'] ?? null,
                     'rrd_id' => $item['rrd_id'] ?? null,
@@ -340,22 +336,17 @@ class wbUpload implements ShouldQueue
         $date = (new DateTime())->format('Y-m-d');
         Price::where('date', $date)->delete();
         $prices = $this->getPrices();
-        $dataForSave = [];
+        //$dataForSave = [];
         foreach ($prices as $item){
             //dd($prices);
 
-            $dataForSave[] = [
+            Price::create([
                 'nm_id' => $item['nmId'],
                 'price' => $item['price'],
                 'discount' => $item['discount'],
                 'promo_code' => $item['promoCode'] ?? null,
                 'date' => $date,
-            ];
-        }
-        $dataForSaveChunks = array_chunk($dataForSave, 1000);
-        foreach ($dataForSaveChunks as $chunk) {
-            //dd($dataForSaveChunks);
-            Price::upsert($chunk, ['nmId']);
+            ]);
         }
 
     }
@@ -417,7 +408,7 @@ class wbUpload implements ShouldQueue
         ])->get('https://statistics-api.wildberries.ru/api/v1/supplier/reportDetailByPeriod', [
             'dateFrom' => $dateFrom->format('Y-m-d'),
             'limit' => $limit,
-            'dateTo' => $dateFrom->add(new DateInterval('P2Y'))->format('Y-m-d'),
+            'dateTo' => (new DateTime())->format('Y-m-d'),
             'rrdid' => $rrdid
         ]);
 

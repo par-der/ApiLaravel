@@ -233,13 +233,12 @@ class wbUpload implements ShouldQueue
 
             $dataForSave = [];
             foreach ($reportDateilByPeriod as $item) {
-                //dd($item);
+                //dd($reportDateilByPeriod);
 
                 $dataForSave[] = [
                     'realizationreport_id' => $item['realizationreport_id'] ?? null,
                     'date_from' => (new DateTime($item['date_from']))->format('Y-m-d') ?? null,
                     'date_to' => (new DateTime($item['date_to']))->format('Y-m-d') ?? null,
-                    'date' => date("Y-m-d") ?? null,
                     'create_dt' => (new DateTime($item['create_dt']))->format('Y-m-d') ?? null,
                     'suppliercontract_code' => $item['suppliercontract_code'] ?? null,
                     'rrd_id' => $item['rrd_id'] ?? null,

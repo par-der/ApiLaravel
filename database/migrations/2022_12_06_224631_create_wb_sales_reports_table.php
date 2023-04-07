@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('realizationreport_id');
             $table->date('date_from')->nullable();
-            $table->date('date')->nullable();
             $table->date('date_to')->nullable();
             $table->dateTime('create_dt')->nullable();
             $table->string('suppliercontract_code')->nullable();

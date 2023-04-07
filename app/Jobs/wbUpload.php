@@ -52,12 +52,12 @@ class wbUpload implements ShouldQueue
     {
 
         $date = new DateTime('2023-01-01');
-//        $this->setExciseGoods($date);
-//        $this->setIncomes($date);
-//        $this->setOrders($date);
-//        $this->setPrices();
-//        $this->setSales($date);
-//        $this->setStocks($date);
+        $this->setExciseGoods($date);
+        $this->setIncomes($date);
+        $this->setOrders($date);
+        $this->setPrices();
+        $this->setSales($date);
+        $this->setStocks($date);
         $this->setReportDetailByPeriods($date);
 
     }
@@ -143,7 +143,7 @@ class wbUpload implements ShouldQueue
 
             $dataForSave[] = [
                 'g_number' => $item['gNumber'],
-                'date' => date("Y-m-d"),
+                'date' => $item['date'],
                 'last_change_date' => $item['lastChangeDate'],
                 'supplier_article' => $item['supplierArticle'],
                 'tech_size' => $item['techSize'],
@@ -211,7 +211,7 @@ class wbUpload implements ShouldQueue
                 'g_number' => $item['gNumber'],
                 'sticker' => $item['sticker'],
                 'srid' => $item['srid'],
-                'date' => date("Y-m-d"),
+                'date' =>$item['date'],
             ];
         }
         $dataForSaveChunks = array_chunk($dataForSave, 1000);

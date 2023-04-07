@@ -33,7 +33,7 @@ class OzonUpload implements ShouldQueue
     public function handle(OzonApi $api): void
     {
         $this->api = $api;
-        //$this->productInfoStocksV3($api);
+        $this->productInfoStocksV3($api);
         $this->postingFboListV2($api);
     }
 
